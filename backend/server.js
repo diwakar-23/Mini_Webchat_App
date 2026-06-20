@@ -52,17 +52,69 @@
 // });
 
 
+// import { createServer } from 'node:http';
+// import express from 'express';
+// import { Server } from 'socket.io';
+
+// const app = express();
+
+// const server = createServer(app);
+
+// const io = new Server(server, {
+//     cors: {
+//         origin: '*',
+//     },
+// });
+
+// const ROOM = 'group';
+
+// io.on('connection', (socket) => {
+//     console.log('a user connected', socket.id);
+
+//     socket.on('joinRoom', async (userName) => {
+//         console.log(`${userName} is joining the group.`);
+
+//         await socket.join(ROOM);
+
+//         // send to all
+//         // io.to(ROOM).emit('roomNotice', userName);
+
+//         // broadcast
+//         socket.to(ROOM).emit('roomNotice', userName);
+//     });
+
+//     socket.on('chatMessage', (msg) => {
+//         socket.to(ROOM).emit('chatMessage', msg);
+//     });
+
+//     socket.on('typing', (userName) => {
+//         socket.to(ROOM).emit('typing', userName);
+//     });
+
+//     socket.on('stopTyping', (userName) => {
+//         socket.to(ROOM).emit('stopTyping', userName);
+//     });
+// });
+
+// app.get('/', (req, res) => {
+//     res.send('<h1>Hello world</h1>');
+// });
 import { createServer } from 'node:http';
 import express from 'express';
 import { Server } from 'socket.io';
+import cors from 'cors'; // Enable explicitly for REST endpoints if you add them later
 
 const app = express();
-
 const server = createServer(app);
+
+// Fallback to local 4600 if process.env.PORT is not set by cloud provider
+const PORT = process.env.PORT || 4600; 
 
 const io = new Server(server, {
     cors: {
-        origin: '*',
+        // Fallback to local dev frontend, otherwise use the deployed production frontend URL
+        origin: process.env.FRONTEND_URL || 'http://localhost:5173', 
+        methods: ["GET", "POST"]
     },
 });
 
@@ -73,13 +125,7 @@ io.on('connection', (socket) => {
 
     socket.on('joinRoom', async (userName) => {
         console.log(`${userName} is joining the group.`);
-
         await socket.join(ROOM);
-
-        // send to all
-        // io.to(ROOM).emit('roomNotice', userName);
-
-        // broadcast
         socket.to(ROOM).emit('roomNotice', userName);
     });
 
@@ -97,9 +143,14 @@ io.on('connection', (socket) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('<h1>Hello world</h1>');
+    res.send('<h1>Server is Live and Healthy!</h1>');
 });
 
-server.listen(4600, () => {
-    console.log('server running at http://localhost:4600');
+// Use the dynamic port variable
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
+
+// server.listen(4600, () => {
+//     console.log('server running at http://localhost:4600');
+// });

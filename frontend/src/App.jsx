@@ -222,5 +222,4 @@ export default function App() {
             )}
         </div>
     );
-    <h1 className='bg-amber-200'>My name is </h1>
-}
+} 
