@@ -117,17 +117,26 @@ const PORT = process.env.PORT || 4600;
 //         methods: ["GET", "POST"]
 //     },
 // });
+// const io = new Server(server, {
+//     cors: {
+//         // Automatically allows both local testing and your specific Render frontend
+//         origin: [
+//             'http://localhost:5173', 
+//             'https://mini-webchat-app.onrender.com'
+//         ], 
+//         methods: ["GET", "POST"]
+//     },
+// });
 const io = new Server(server, {
     cors: {
-        // Automatically allows both local testing and your specific Render frontend
         origin: [
             'http://localhost:5173', 
-            'https://mini-webchat-app.onrender.com'
+            'https://mini-webchat-app.onrender.com',
+            'https://chat-app-frontend-rugq.onrender.com'
         ], 
         methods: ["GET", "POST"]
     },
 });
-
 const ROOM = 'group';
 
 io.on('connection', (socket) => {
