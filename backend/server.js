@@ -107,13 +107,23 @@ import cors from 'cors'; // Enable explicitly for REST endpoints if you add them
 const app = express();
 const server = createServer(app);
 
-// Fallback to local 4600 if process.env.PORT is not set by cloud provider
+
 const PORT = process.env.PORT || 4600; 
 
+// const io = new Server(server, {
+//     cors: {
+        
+//         origin: process.env.FRONTEND_URL || 'http://localhost:5173', 
+//         methods: ["GET", "POST"]
+//     },
+// });
 const io = new Server(server, {
     cors: {
-        // Fallback to local dev frontend, otherwise use the deployed production frontend URL
-        origin: process.env.FRONTEND_URL || 'http://localhost:5173', 
+        // Automatically allows both local testing and your specific Render frontend
+        origin: [
+            'http://localhost:5173', 
+            'https://chat-app-frontend-rugq.onrender.com'
+        ], 
         methods: ["GET", "POST"]
     },
 });
