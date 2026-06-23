@@ -122,7 +122,7 @@ const io = new Server(server, {
         // Automatically allows both local testing and your specific Render frontend
         origin: [
             'http://localhost:5173', 
-            'https://chat-app-frontend-rugq.onrender.com'
+            'https://mini-webchat-app.onrender.com'
         ], 
         methods: ["GET", "POST"]
     },
